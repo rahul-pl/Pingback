@@ -1,0 +1,9 @@
+[submodule "httpApplication"]
+	path = httpApplication
+	url = git@github.com:rahul-pl/httpApplication.git
+[submodule "httpparser"]
+	path = httpparser
+	url = git@github.com:rahul-pl/httpparser.git
+[submodule "cyclo"]
+	path = cyclo
+	url = git://github.com/kashifrazzaqui/cyclo.git
