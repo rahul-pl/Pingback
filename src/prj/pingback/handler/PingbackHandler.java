@@ -4,7 +4,7 @@ import prj.httpApplication.RawHTTPResponse;
 import prj.httpApplication.app.HTTPRequestHandler;
 import prj.httpparser.httpparser.RawHTTPRequest;
 
-public class PingBackHandler extends HTTPRequestHandler
+public class PingbackHandler extends HTTPRequestHandler
 {
     @Override
     public RawHTTPResponse get(RawHTTPRequest request)
