@@ -6,6 +6,7 @@ import prj.httpApplication.agent.HTTPAgent;
 import prj.httpApplication.app.BasicRouter;
 import prj.httpApplication.app.Router;
 import prj.httpApplication.app.WebApp;
+import prj.pingback.devicemanager.DeviceManager;
 import prj.pingback.handler.PingbackHandler;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class Pingback
         Router router = new BasicRouter()
         {
             {
-                addRouting("/heartbeat/android", new PingbackHandler());
+                addRouting("/heartbeat/android", new PingbackHandler(new DeviceManager()));
             }
         };
         WebApp webApp = new WebApp(router);
