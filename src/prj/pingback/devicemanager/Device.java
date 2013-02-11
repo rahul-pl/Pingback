@@ -1,12 +1,23 @@
 package prj.pingback.devicemanager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Date;
+import java.util.concurrent.ScheduledFuture;
+
 public class Device
 {
     private String _deviceId;
     private String _versionNumber;
+    private Date _registryDate;
+    private ScheduledFuture _cancellingFuture;
+    public static String VERSION = "version";
+    public static String DEVICE_ID = "device_id";
 
     public Device(String deviceId, String versionNumber)
     {
+        System.out.println("new Device");
         _deviceId = deviceId;
         _versionNumber = versionNumber;
     }
@@ -19,6 +30,19 @@ public class Device
     public String getVersionNumber()
     {
         return _versionNumber;
+    }
+
+    public void setRegistryTime(Date date, ScheduledFuture future)
+    {
+        System.out.println("device " + this + " registered at " + date);
+        _registryDate = date;
+        _cancellingFuture = future;
+    }
+
+    public void resetCancellingFuture()
+    {
+        System.out.println("device " + this + " deregistration cancelled at " + new Date());
+        _cancellingFuture.cancel(true);
     }
 
     @Override
@@ -35,8 +59,18 @@ public class Device
     }
 
     @Override
-    public int hashCode()
+    public String toString()
     {
-        return _deviceId.hashCode();
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put(DEVICE_ID, _deviceId);
+            jsonObject.put(VERSION, _versionNumber);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
     }
 }

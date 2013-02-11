@@ -2,38 +2,55 @@ package prj.pingback.devicemanager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import prj.pingback.utils.ConcurrencyUtils;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class DeviceManager implements IDeviceManager
 {
-    private Map<String, Set<Device>> versionMap;
+    private Map<String, Map<String, Device>> versionMap;
+    private ConcurrencyUtils _concurrencyUtils;
 
-    public DeviceManager()
+    public DeviceManager(ConcurrencyUtils concurrencyUtils)
     {
+        _concurrencyUtils = concurrencyUtils;
         versionMap = new HashMap<>();
     }
 
-    public void registerDevice(final Device device)
+    public void registerDevice(Device device)
     {
-        String relevantVersionNumber = device.getVersionNumber();
-        Set<Device> relevantSet = versionMap.get(relevantVersionNumber);
-        if (relevantSet == null)
+        final String relevantVersionNumber = device.getVersionNumber();
+        Map<String, Device> relevantMap = versionMap.get(relevantVersionNumber);
+        if (relevantMap == null)
         {
-            versionMap.put(relevantVersionNumber, new HashSet<Device>()
-            {
-                {
-                    add(device);
-                }
-            });
+            versionMap.put(relevantVersionNumber, (relevantMap = new HashMap<>()));
+        }
+        if (relevantMap.containsKey(device.getDeviceId()))
+        {
+            device = relevantMap.get(device.getDeviceId());
+            device.resetCancellingFuture();
         }
         else
         {
-            relevantSet.add(device);
+            relevantMap.put(device.getDeviceId(), device);
         }
+        final Device finalDevice = device;
+        device.setRegistryTime(new Date(), _concurrencyUtils.scheduleOnSTP(
+                new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        System.out.println("device " + finalDevice + " de-registered at " + new Date());
+                        Map<String, Device> set = versionMap.get(relevantVersionNumber);
+                        set.remove(finalDevice.getDeviceId());
+                        if (set.size() == 0)
+                        {
+                            versionMap.remove(set);
+                        }
+                    }
+                }, 30, TimeUnit.SECONDS));
     }
 
     @Override
