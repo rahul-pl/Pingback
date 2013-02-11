@@ -50,7 +50,7 @@ public class DeviceManager implements IDeviceManager
                             versionMap.remove(relevantVersionNumber);
                         }
                     }
-                }, 10, TimeUnit.SECONDS));
+                }, 10 * 60 * 60, TimeUnit.SECONDS));
     }
 
     @Override
