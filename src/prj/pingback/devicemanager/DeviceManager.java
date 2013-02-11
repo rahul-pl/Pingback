@@ -47,10 +47,10 @@ public class DeviceManager implements IDeviceManager
                         set.remove(finalDevice.getDeviceId());
                         if (set.size() == 0)
                         {
-                            versionMap.remove(set);
+                            versionMap.remove(relevantVersionNumber);
                         }
                     }
-                }, 30, TimeUnit.SECONDS));
+                }, 10, TimeUnit.SECONDS));
     }
 
     @Override

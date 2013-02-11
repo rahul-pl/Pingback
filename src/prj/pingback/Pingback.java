@@ -42,7 +42,7 @@ public class Pingback
             }
         };
         WebApp webApp = new WebApp(router);
-        return new HTTPAgent(_reactor, webApp, 8080, _stp);
+        return new HTTPAgent(_reactor, webApp, 80, _stp);
     }
 
     private static void setupThreads()
