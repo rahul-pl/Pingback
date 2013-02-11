@@ -1,5 +1,8 @@
 package prj.pingback.devicemanager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,5 +34,22 @@ public class DeviceManager implements IDeviceManager
         {
             relevantSet.add(device);
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        JSONObject jsonObject = new JSONObject();
+        for (String key : versionMap.keySet())
+        {
+            try
+            {
+                jsonObject.put(key, versionMap.get(key).size());
+            }
+            catch (JSONException e)
+            {
+            }
+        }
+        return jsonObject.toString();
     }
 }
