@@ -6,6 +6,7 @@ import prj.httpApplication.agent.HTTPAgent;
 import prj.httpApplication.app.BasicRouter;
 import prj.httpApplication.app.Router;
 import prj.httpApplication.app.WebApp;
+import prj.pingback.crash.client.HTTPClient;
 import prj.pingback.crash.handler.CrashHandler;
 import prj.pingback.heartbeat.devicemanager.DeviceManager;
 import prj.pingback.heartbeat.handler.PingbackHandler;
@@ -36,11 +37,12 @@ public class Pingback
 
     private static Agent initiateAgent()
     {
+        final ConcurrencyUtils concurrencyUtils = ConcurrencyUtils.getInstance();
         Router router = new BasicRouter()
         {
             {
-                addRouting("/heartbeat/android", new PingbackHandler(new DeviceManager(ConcurrencyUtils.getInstance())));
-                addRouting("/heartbeat/crash", new CrashHandler());
+                addRouting("/heartbeat/android", new PingbackHandler(new DeviceManager(concurrencyUtils)));
+                addRouting("/crash/android", new CrashHandler(new HTTPClient(concurrencyUtils)));
             }
         };
         WebApp webApp = new WebApp(router);
