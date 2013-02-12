@@ -1,4 +1,4 @@
-package prj.pingback.devicemanager;
+package prj.pingback.heartbeat.devicemanager;
 
 public interface IDeviceManager
 {

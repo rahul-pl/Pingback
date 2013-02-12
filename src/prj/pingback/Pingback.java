@@ -6,8 +6,9 @@ import prj.httpApplication.agent.HTTPAgent;
 import prj.httpApplication.app.BasicRouter;
 import prj.httpApplication.app.Router;
 import prj.httpApplication.app.WebApp;
-import prj.pingback.devicemanager.DeviceManager;
-import prj.pingback.handler.PingbackHandler;
+import prj.pingback.crash.handler.CrashHandler;
+import prj.pingback.heartbeat.devicemanager.DeviceManager;
+import prj.pingback.heartbeat.handler.PingbackHandler;
 import prj.pingback.utils.ConcurrencyUtils;
 
 import java.io.IOException;
@@ -39,6 +40,7 @@ public class Pingback
         {
             {
                 addRouting("/heartbeat/android", new PingbackHandler(new DeviceManager(ConcurrencyUtils.getInstance())));
+                addRouting("/heartbeat/crash", new CrashHandler());
             }
         };
         WebApp webApp = new WebApp(router);

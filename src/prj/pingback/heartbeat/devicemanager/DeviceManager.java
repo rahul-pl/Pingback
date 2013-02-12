@@ -1,4 +1,4 @@
-package prj.pingback.devicemanager;
+package prj.pingback.heartbeat.devicemanager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
