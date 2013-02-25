@@ -11,6 +11,7 @@ import prj.pingback.crash.handler.CrashHandler;
 import prj.pingback.heartbeat.devicemanager.DeviceManager;
 import prj.pingback.heartbeat.handler.PingbackHandler;
 import prj.pingback.utils.ConcurrencyUtils;
+import prj.pingback.utils.PingbackConfig;
 
 import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -23,21 +24,22 @@ public class Pingback
 
     public static void main(String[] args) throws IOException
     {
-        _reactor = TCPReactor.initiate();
-
         setupThreads();
-
         ConcurrencyUtils.initiate(_stp);
+        PingbackConfig.loadEnv();
 
+        _reactor = TCPReactor.initiate();
         Agent pingBackAgent = initiateAgent();
-
         _reactor.register(pingBackAgent);
         _reactor.fire();
     }
 
     private static Agent initiateAgent()
     {
+        int port = PingbackConfig.getPort();
+
         final ConcurrencyUtils concurrencyUtils = ConcurrencyUtils.getInstance();
+
         Router router = new BasicRouter()
         {
             {
@@ -46,7 +48,8 @@ public class Pingback
             }
         };
         WebApp webApp = new WebApp(router);
-        return new HTTPAgent(_reactor, webApp, 80, _stp);
+
+        return new HTTPAgent(_reactor, webApp, port, _stp);
     }
 
     private static void setupThreads()
