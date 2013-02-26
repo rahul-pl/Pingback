@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan='true'>
+
+    <appender name="DEBUGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/var/log/pingback/debug.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>/var/log/pingback/debug-%d{yyyy-MM-dd-HH}.log.gz</fileNamePattern>
+            <!-- keep 7 days' worth of history -->
+            <maxHistory>168</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level | %marker | %logger{200} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ERRORFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/var/log/pingback/error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>/var/log/pingback/error-%d{yyyy-MM-dd-HH}.log.gz</fileNamePattern>
+            <!-- keep 7 days' worth of history -->
+            <maxHistory>168</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] | %marker | %logger{200} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <smtpHost>smtp.gmail.com</smtpHost>
+        <SSL>true</SSL>
+        <username>fakeuser.talkto@gmail.com</username>
+        <password>paparazzi</password>
+        <smtpPort>465</smtpPort>
+        <from>fakeuser.talkto@gmail.com</from>
+        <subject>Pingback Log - ${HOSTNAME}</subject>
+        <to>rahulpaliwal172@gmail.com</to>
+
+        <!-- add to attributes for address to which alert mails are to be sent -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{HH:mm:ss.SSS} [%thread] | %marker | %logger{200} - %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="ERRORFILE"/>
+        <appender-ref ref="DEBUGFILE"/>
+        <appender-ref ref="EMAIL"/>
+    </root>
+
+</configuration>

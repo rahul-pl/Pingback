@@ -2,18 +2,24 @@ package prj.pingback.heartbeat.devicemanager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import prj.pingback.utils.ConcurrencyUtils;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class DeviceManager implements IDeviceManager
 {
+    private Logger _logger;
     private Map<String, Map<String, Device>> versionMap;
     private ConcurrencyUtils _concurrencyUtils;
 
     public DeviceManager(ConcurrencyUtils concurrencyUtils)
     {
+        _logger = LoggerFactory.getLogger(DeviceManager.class.getSimpleName());
         _concurrencyUtils = concurrencyUtils;
         versionMap = new HashMap<>();
     }
@@ -42,7 +48,7 @@ public class DeviceManager implements IDeviceManager
                     @Override
                     public void run()
                     {
-                        System.out.println("device " + finalDevice + " de-registered at " + new Date());
+                        _logger.debug("De-Registration | {} | {}", finalDevice, new Date());
                         Map<String, Device> set = versionMap.get(relevantVersionNumber);
                         set.remove(finalDevice.getDeviceId());
                         if (set.size() == 0)

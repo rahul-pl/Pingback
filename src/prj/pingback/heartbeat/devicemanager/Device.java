@@ -2,22 +2,27 @@ package prj.pingback.heartbeat.devicemanager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.concurrent.ScheduledFuture;
 
 public class Device
 {
+    public static String VERSION = "version";
+    public static String DEVICE_ID = "device_id";
+
+    private Logger _logger;
     private String _deviceId;
     private String _versionNumber;
     private Date _registryDate;
     private ScheduledFuture _cancellingFuture;
-    public static String VERSION = "version";
-    public static String DEVICE_ID = "device_id";
 
     public Device(String deviceId, String versionNumber)
     {
-        System.out.println("new Device");
+        _logger = LoggerFactory.getLogger(Device.class.getSimpleName());
+        _logger.debug("new Device | {}", this);
         _deviceId = deviceId;
         _versionNumber = versionNumber;
     }
@@ -34,14 +39,14 @@ public class Device
 
     public void setRegistryTime(Date date, ScheduledFuture future)
     {
-        System.out.println("device " + this + " registered at " + date);
+        _logger.debug("Registration | {} | {}", this, date);
         _registryDate = date;
         _cancellingFuture = future;
     }
 
     public void resetCancellingFuture()
     {
-        System.out.println("device " + this + " deregistration cancelled at " + new Date());
+        _logger.debug("De-Registration cancelled | {} | {}", this, new Date());
         _cancellingFuture.cancel(true);
     }
 
