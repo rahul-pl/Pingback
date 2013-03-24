@@ -13,7 +13,7 @@ public class PingbackConfig
 {
     private static Properties _properties = new Properties();
     private static Logger _logger = LoggerFactory.getLogger(PingbackConfig.class.getSimpleName());
-    private static String _configFilePath = "config.properties";
+    private static String _configFilePath = "config/config.properties";
 
     public static void loadEnv() throws IOException
     {
