@@ -8,7 +8,7 @@
             <!-- daily rollover -->
             <fileNamePattern>/var/log/pingback/debug-%d{yyyy-MM-dd-HH}.log.gz</fileNamePattern>
             <!-- keep 7 days' worth of history -->
-            <maxHistory>168</maxHistory>
+            <maxHistory>72</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level | %marker | %logger{200} - %msg%n</pattern>
@@ -24,7 +24,7 @@
             <!-- daily rollover -->
             <fileNamePattern>/var/log/pingback/error-%d{yyyy-MM-dd-HH}.log.gz</fileNamePattern>
             <!-- keep 7 days' worth of history -->
-            <maxHistory>168</maxHistory>
+            <maxHistory>72</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] | %marker | %logger{200} - %msg%n</pattern>
